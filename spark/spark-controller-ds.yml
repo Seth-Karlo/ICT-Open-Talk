@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  generation: 1
+  labels:
+    component: spark-worker
+  name: spark-worker-controller
+  selfLink: /api/v1/namespaces//replicationcontrollers/spark-worker-controller
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: spark-worker
+    spec:
+      containers:
+      - command:
+        - /start-worker
+        image: gcr.io/google_containers/spark:1.5.2_v1
+        imagePullPolicy: IfNotPresent
+        name: spark-worker
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
